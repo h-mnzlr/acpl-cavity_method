@@ -26,6 +26,7 @@ def forward_step_runner(
     initial_conf: Configuration,
     forward: ForwardStepper,
     max_steps: int,
+    callback: None | Callable[[int, Configuration], None] = None,
     pbar: None | ProgressBar = None
 ) -> PopulationEnsemble:
     """Main function of a simple simulation consisting of only forward steps."""
@@ -35,9 +36,11 @@ def forward_step_runner(
     configuration = initial_conf
     conf_ensemble = []
 
-    for _ in pbar(range(max_steps)):
+    for step in pbar(range(max_steps)):
         forward(configuration)
         conf_ensemble.append(configuration)
+        if callback is not None:
+            callback(step, configuration)
     return conf_ensemble
 
 @numba.njit
