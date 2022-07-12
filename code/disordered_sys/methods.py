@@ -52,8 +52,8 @@ def population_step(
     if not in_place:
         pop = pop.copy()
     n_p = len(pop)
-    population_idxs = rng.integers(low=0, high=n_p - 1, size=c - 1)
-    change_idx = rng.integers(low=0, high=n_p - 1)
+    population_idxs = rng.integers(low=0, high=n_p, size=c - 1)
+    change_idx = rng.integers(low=0, high=n_p)
     sample_values = pop.take(population_idxs[:-1])
     pop[change_idx] = update_eqn(sample_values)
     return pop
