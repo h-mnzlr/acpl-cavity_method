@@ -7,13 +7,13 @@ import networkx as nx
 
 from numpy.typing import NDArray
 
-def anderson_graph(conn: int = 3, size: int = 2**10, seed=None) -> nx.Graph:
+def graph(conn: int = 3, size: int = 2**10, seed=None) -> nx.Graph:
     """Create an infinite dimensional Anderson Graph."""
     if seed is None:
         seed = np.random.default_rng()
     return nx.random_regular_graph(conn, size, seed=seed)
 
-def anderson_hamiltonian(
+def hamiltonian(
     conn_graph: nx.Graph,
     w: float = .3,
 ) -> NDArray[np.float64]:
@@ -23,8 +23,8 @@ def anderson_hamiltonian(
 
     return -adj_matrix + anderson_noise * np.identity(len(conn_graph))
 
-def anderson_cavity_eqn(
-    samples: NDArray[np.float64] | np.float64,
+def cavity_eqn(
+    samples: NDArray[np.complex64] | np.complex64,
     eigv: float,
     impurity_w: float,
     epsilon: float,
@@ -33,3 +33,10 @@ def anderson_cavity_eqn(
     """Implements the cavity equation for the Anderson model."""
     e = rng.uniform(low=-impurity_w, high=impurity_w)
     return 1j * (eigv - 1j * epsilon - e) + np.sum(1 / samples)
+
+def guess_initial_cavity_marginals(
+    n_pop: int, rng: np.random.Generator = np.random.default_rng()
+) -> NDArray[np.complex64]:
+    random_realpart = rng.rayleigh(scale=0.1, size=n_pop)
+    random_imagpart = rng.normal(loc=0, scale=2.5, size=n_pop)
+    return random_realpart + 1j * random_imagpart

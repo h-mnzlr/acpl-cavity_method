@@ -6,7 +6,7 @@
 import numba
 import numpy as np
 
-from numpy.typing import NDArray
+from numpy.typing import NDArray, ArrayLike
 from typing import Callable, Iterable, Any
 
 # Type definitions
@@ -15,7 +15,7 @@ ProgressBar = Callable[[Iterable], Iterable]
 Configuration = Any
 ForwardStepper = Callable[[Configuration], Configuration]
 
-Population = NDArray[np.float64]
+Population = NDArray[np.complex64]
 PopulationEnsemble = list[Population]
 UpdateEqn = Callable[[Population], Population]
 PopulationStepper = Callable[[Population], Population | None]
@@ -43,10 +43,9 @@ def forward_step_runner(
             callback(step, configuration)
     return conf_ensemble
 
-@numba.njit
 def population_step(
-    update_eqn: UpdateEqn,
     pop: Population,
+    update_eqn: UpdateEqn,
     c: int,
     in_place: bool = True,
     rng: np.random.Generator = np.random.default_rng()
@@ -60,3 +59,14 @@ def population_step(
     sample_values = pop.take(population_idxs[:-1])
     pop[change_idx] = update_eqn(sample_values)
     return pop
+
+def spectral_density(
+    marginal_precisions: list[NDArray[np.float64]]
+) -> list[np.float64]:
+    """Calculate spectral density from distributions of marginal distributions."""
+    spectral_densities = []
+    for marginals in marginal_precisions:
+        G_ii = marginals
+        rho_lambda = G_ii.mean() / np.pi
+        spectral_densities.append(rho_lambda)
+    return spectral_densities
