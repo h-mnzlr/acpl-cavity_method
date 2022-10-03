@@ -2,11 +2,11 @@
 # heikogeorg.menzler@stud.uni-goettingen.de
 #
 # Date: 12.07.2022
+from functools import partial
 
-import numba
 import numpy as np
 
-from numpy.typing import NDArray, ArrayLike
+from numpy.typing import NDArray
 from typing import Callable, Iterable, Any
 
 # Type definitions
@@ -66,7 +66,28 @@ def spectral_density(
     """Calculate spectral density from distributions of marginal distributions."""
     spectral_densities = []
     for marginals in marginal_precisions:
-        G_ii = marginals
-        rho_lambda = G_ii.mean() / np.pi
+        G_ii = 1j / marginals
+        rho_lambda = G_ii.imag.mean() / np.pi
         spectral_densities.append(rho_lambda)
     return spectral_densities
+
+def full_population_marginal(
+    initial_pop: Population,
+    update_eqn: UpdateEqn,
+    c: int,
+    rng: np.random.Generator = np.random.default_rng()
+) -> PopulationEnsemble:
+    cavity_pop_stepper = partial(
+        population_step, update_eqn=update_eqn, c=c - 1, rng=rng
+    )
+    cavity_pop_ens = forward_step_runner(
+        initial_pop, cavity_pop_stepper, max_steps=100_000
+    )
+
+    marginals_pop_stepper = partial(
+        population_step, update_eqn=update_eqn, c=c, rng=rng
+    )
+    marginals_pop_ens = forward_step_runner(
+        cavity_pop_ens[-1], marginals_pop_stepper, max_steps=12_000
+    )
+    return marginals_pop_ens

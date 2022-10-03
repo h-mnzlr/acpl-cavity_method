@@ -31,7 +31,7 @@ def cavity_eqn(
     rng: np.random.Generator = np.random.default_rng()
 ):
     """Implements the cavity equation for the Anderson model."""
-    e = rng.uniform(low=-impurity_w, high=impurity_w)
+    e = rng.uniform(low=-impurity_w / 2, high=impurity_w / 2)
     return 1j * (eigv - 1j * epsilon - e) + np.sum(1 / samples)
 
 def guess_initial_cavity_marginals(
