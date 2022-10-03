@@ -1,18 +1,23 @@
 \documentclass[12pt, a4paper]{article}
 
 \usepackage[english]{babel}
+\usepackage[]{csquotes}
+
+\usepackage[]{biblatex}
+\addbibresource{bibliography.bib}
 
 \usepackage[]{graphicx}
+\usepackage[]{floatpag}
 \usepackage[]{caption}
 \usepackage[]{subcaption}
 \captionsetup{subrefformat=parens}
 
 
 \usepackage[]{amsmath}
+\usepackage[]{amssymb}
 \usepackage[]{physics}
 \usepackage[]{nicefrac}
 
-\usepackage[]{standalone}
 \usepackage[]{xr}
 \usepackage[]{subfiles}
 % \externaldocument[FULL_][\subfix{main}]
@@ -26,5 +31,9 @@
 \subfile{sections/ex1.tex}
 
 \subfile{sections/ex2.tex}
+
+\subfile{sections/ex3.tex}
+
+\printbibliography
 
 \end{document}
