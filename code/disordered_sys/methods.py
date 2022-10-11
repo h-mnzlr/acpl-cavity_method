@@ -5,6 +5,7 @@
 from functools import partial
 
 import numpy as np
+import networkx as nx
 
 from numpy.typing import NDArray
 from typing import Callable, Iterable
@@ -15,7 +16,7 @@ Configuration = NDArray[np.complex64]
 
 ForwardStepper = Callable[[Configuration], Configuration]
 
-PopulationEnsemble = list[Configuration]
+Ensemble = list[Configuration]
 UpdateEqn = Callable[[Configuration], Configuration]
 
 identity_iterator = lambda x: (yield from x)
@@ -26,7 +27,7 @@ def forward_step_runner(
     max_steps: int,
     callback: None | Callable[[int, Configuration], None] = None,
     pbar: None | ProgressBar = None
-) -> PopulationEnsemble:
+) -> Ensemble:
     """Main function of a simple simulation consisting of only forward steps."""
     if pbar is None:
         pbar = identity_iterator
@@ -69,7 +70,7 @@ def spectral_density(marginal_precisions: list[NDArray[np.float64]]) -> list[np.
 
 def full_population_marginal(
     initial_pop: Configuration, update_eqn: UpdateEqn, c: int, rng: np.random.Generator = np.random.default_rng()
-) -> PopulationEnsemble:
+) -> Ensemble:
     cavity_pop_stepper = partial(population_step, update_eqn=update_eqn, c=c - 1, rng=rng)
     cavity_pop_ens = forward_step_runner(initial_pop, cavity_pop_stepper, max_steps=100_000)
 

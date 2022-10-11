@@ -24,3 +24,4 @@ split_all_top_level_comma_separated_values = true
 split_all_comma_separated_values = false
 split_complex_comprehension = true
 blank_lines_around_top_level_definition = 1
+column_limit = 120
