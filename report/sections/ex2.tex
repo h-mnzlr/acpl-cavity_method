@@ -122,7 +122,46 @@ In similar fashion we can also obtain an equation for the marginal precisions $\
 
 \subsubsection{Cavity method for sparse matrices}
 
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../figures/ex2_spectrum_eps_large.pdf}
+    \caption{
+        Spectral density calculated from the Cavity Method for $\varepsilon=\num{e-3}$ in a sparsely connected RRG of connectivity $c = \num{3}$.
+        The graph is made up from $\num[parse-numbers = false]{2^{11}}$ nodes.
+    }
+    \label{fig:rrg_spectrum_cavity}
+\end{figure}
+
+\begin{figure}[htpb]
+    \centering
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{../figures/ex2_spectrum_eps_medium.pdf}
+        \caption{}\label{fig:rrg_spectrum_eps_med}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+        \includegraphics[width=\textwidth]{../figures/ex2_spectrum_eps_small.pdf}
+        \caption{}\label{fig:rrg_spectrum_eps_small}
+    \end{subfigure} 
+    \caption{
+        Spectrum of the system for different parameters of $\varepsilon =$ \num{e-5}(\num{e-8}) in figure \subref{fig:rrg_spectrum_eps_med}/\subref{fig:rrg_spectrum_eps_small}.
+        Similar to Figure \ref{fig:rrg_spectrum_cavity} the size of the graph is \num[parse-numbers = false]{2^{11}} and the connectivity is $c = 3$.
+    }
+    \label{fig:rrg_spectrum_different_eps}
+\end{figure}
+
+Next to the method of direct Diagonalization we can also use the cavity method to obtain the spectrum of the graph's adjacency matrix.
+The spectrum shown in Figure \ref{fig:rrg_spectrum_cavity} was obtained using this method using the cavity equations \eqref{eq:cavity_precs} and \eqref{eq:marginals_precs}.
+We find that the spectrum is qualitatively consistent with the results obtained from Direct Diagonalization in Figure \ref{fig:spectrum_sparse}.
+\par
+
+In Figure \ref{fig:rrg_spectrum_different_eps} we have displayed that same spectrum calculated using the cavity method but for different values of $\varepsilon$.
+We can see that the spectra from this version of the algorithm are slightly different to the one obtained for a larger $\varepsilon$.
+As to what the role of $\varepsilon$ in the algorithm we feel that these results are inconclusive.
+Nonetheless we suspect that $\varepsilon$ influences the convergence behavior of the algorithm and both Plots in Figure \ref{fig:rrg_spectrum_different_eps} show poorly converged spectra.
+\par
+
 \subsubsection{Mean-Field limit}
+\label{sec:mean_field_limit}
 
 In the mean-field limit for the fully connected graph we assume $N \to \infty$.
 We can see from equation \eqref{eq:cavity_precs} that -- in this limit and on a fully connected graph -- the single term left out scales as $\mathcal{O}(1)$, while the entire sum scales as $\mathcal{O}(N)$.
@@ -130,6 +169,46 @@ As $N$ grows, we will find that it will be increasingly less significant whether
 
 \subsubsection{Mean Resolvent}
 
+Another means to verify our results is by analyzing the system analytically in the mean field limit introduced in Section \ref{sec:mean_field_limit}.
+We do so by analyzing the mean resolvent $g$ and expressing it in terms of the marginal precisions $\omega_j$
+\begin{align}
+    \label{eq:mean_resolvent}
+    g_{ \text{MF} } = \frac{i}{N}\sum_{j=1}^{N} \omega_j^{-1}
+.\end{align}
+
+Into equation \eqref{eq:mean_resolvent} we the obtained recursive relationship for the marginal precisions from equation \eqref{eq:marginals_precs}.
+By using that $A_{ ij } = 1$ in $M_{ ij } = A_{ ij } J_{ ij } $ we can simplify the obtained equation to get 
+\begin{align}
+    \label{eq:mean_resolvent_limit}
+    g_{ \text{MF} }  = \frac{i}{N} \sum_{j=1}^{N} \left( i(\lambda - i \varepsilon) + \sum_{k \in \partial j}^{} \frac{J^2_{ kj }}{\omega_k} \right)^{-1}
+.\end{align}
+
+As we are using the fully connected case we can resolve the sum inside the parenthesis in equation \eqref{eq:mean_resolvent_limit} to obtain 
+\begin{align}
+    \label{eq:mean_resolvent_resolved}
+    g_{ \text{MF} } = \frac{1}{N} \sum_{j=1}^{N} \frac{1}{i(\lambda - i \varepsilon) + \frac{1}{N}\sum\limits_{k}^{N} \frac{1}{\omega_k}}
+.\end{align}
+
+Such we have found the self-consistent equation (by identifying the sum of the denominator in equation \eqref{eq:mean_resolvent_resolved} with $g_{ \text{MF} } $).
+This equation is nothing more than then a quadratic equation in the mean field resolvent 
+
+\[
+    g_{ \text{MF} } = \frac{i}{i(\lambda - i \varepsilon) - i g_{ \text{MF} } }  
+    \qquad 
+    \Longleftrightarrow
+    \qquad
+    g_{ \text{MF} } = \frac{\lambda_\varepsilon}{2} \pm \sqrt{\frac{\lambda_\varepsilon^2}{4} - 1}, 
+    \qquad
+    \lambda_\varepsilon = \lambda - i \varepsilon
+.\] 
+
+If we plug this result into the given equation for the spectral density we recover the Wigner-Semicircle law 
+
+\[
+    \rho(\lambda) = \lim\limits_{\varepsilon \to 0} \operatorname{Im}\left(\frac{\lambda_\varepsilon}{2} \pm\sqrt{\frac{\lambda_\varepsilon^2}{4} - 1}\right) = \frac{1}{2\pi} \sqrt{4 - \lambda^2} 
+.\] 
+
+Such we have shown that our simulation techniques are indeed consistent with analytical results.
 
 
 \ifSubfilesClassLoaded{
