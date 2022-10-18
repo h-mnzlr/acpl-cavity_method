@@ -74,10 +74,67 @@ Such we stop, when a whole sweep ($N_p$ updates) has not changed the absolute me
 We are aware that this criterion is not universal, but throughout experimenting with the algorithm we have seen that this is criterion works sufficiently well.
 
 
-\subsection{Extended-Localized Transition}
+\subsection{Extended-Localized Transition -- Cavity Variances}
 
-To look at the transition from extended to Localized States we can analyze the typical value of the cavity variances $g = \nicefrac{i}{\omega}$
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../figures/ex3_population_method_scaling.pdf}
+    \caption{Scaling behavior of different population sizes of the typical cavity variance $g^{\text{typ}}$ at different disoreder strengths using the population method for different population values $N_p$ at $\varepsilon = \num{e-300}$ at fixed $\lambda = 0$.}
+    \label{fig:population_method}
+\end{figure}
 
+To look at the transition from extended to Localized States we can analyze the typical value of the cavity variances $g = \nicefrac{i}{\omega}$, defined as $g^{\text{typ}} = e^{\left<\ln( \operatorname{Im} g )  \right>}$.
+In Figure \ref{fig:population_method} we can see a steep drop-off (notice it's a log-plot) approaching the critical value of $W_c \approx 18.2$.
+As we are dealing with finite systems we want to look at the scaling behavior of different system sizes, which we can easily implement using the different population sizes.
+We can see that larger systems make a much later transition (note that $N_p = \num{e3}$ starts decaying first and the other experiments generally have the larger values).
+\par
+
+This transition can be understood as an isolator-conductor transition:
+At small disorder the system is in an extended state which allows for flow of "charge" between lattice sites.
+On the other hand -- if the disorder becomes large -- the system becomes localized and transitions between lattice sites are suppressed.
+
+
+\subsection{Extended-Localized Transition -- Marginal Variances}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../figures/ex3_typical_marginal_dists.pdf}
+    \caption{
+    Marginal Variances distributions for a extended and for a localized state. The localized state was chosen at $W = \num{20}$ and the extended state was chosen at $W = \num{2}$. 
+    The Marginal Variances have been calculated from the Marginal Precisions of a Population Method simulation at $N_p = \num{e4}$ and $\varepsilon = \num{e-6}$
+}
+    \label{fig:marginal_variances_typical}
+\end{figure}
+
+To analyze the transition instead of looking at the Cavity Variances we can also look at the typical distribution of Marginal Variances for extended and localized states.
+In Figure \ref{fig:marginal_variances_typical} we can see that the typical distribution for localized state is strongly concentrated around $0$ while the extended state can have a different mean and is generally more spread out.
+
+
+\subsection{Inverse Participation Ratio (IPR)}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../figures/ex3_inverse_particitpation_ratio.pdf}
+    \caption{
+        Average of the product $N \cdot I_2$ ($I_2$ being the IPR) over minimum \num{10} eigenvectors in a small environment around $\lambda = 0$ plotted against disorder strength $W$.
+        The eigenvalues and eigenvectors for the different Graph sizes $N$ were calculated using Direct Diagonalization.
+    }
+    \label{fig:ipr_direct_diagonalization}
+\end{figure}
+
+Lastly we want to look at the Inverse Participation Ratio (IPR) 
+\[
+    I_2(v) = \frac{\frac{1}{N}\sum_{i=1}^{N} v_i^{4}}{\frac{1}{N}\sum_{i = 1}^{N} v_i^2}
+,\] 
+which is a well studied measure of how localized a given vector is (or conversely how spread out).
+Thus we might gain some further inside into the systems localization behavior by looking at this quantity.
+For the analysis we choose a few eigenvectors with eigenvalues around $\lambda = 0$ because they are most important for the conduction behavior.
+\par
+
+In Figure \ref{fig:ipr_direct_diagonalization} we can see the different scaling behaviors of the IPR values for different system sizes.
+We can see, that even though we have not chosen an interval of $W$s with a transition we can still see that the IPR is scaling linearly (as we expect).
+Unfortunately this means that when we are looking at the transition, that we want to identify by using it's finite size scaling properties we need to distinguish between the natural scaling of the IPR and the finite size scaling of the transition.
+This means that the IPR measure is not very well suited to detect transitions in finite size systems.
 
 
 \ifSubfilesClassLoaded{
