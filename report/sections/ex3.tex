@@ -29,7 +29,54 @@ Using our methods we can calculate the spectral density of the system, which in 
 Such we can use our methods to analyze the localization behavior of the model.
 
 
-\subsection{}
+\subsection{Spectrum from Direct Diagonalization and Cavity Method}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../figures/ex3_spectrum_exact_diag.pdf}
+    \caption{Spectral density of the Anderson Model for small disorder $W = \num{.3}$ on a large RRG of connectivity $c=3$ and $ N = 2^{10}$ nodes calculated by Direct Diagonalization of the Hamiltonian.}
+    \label{fig:spectrum_exact_diagonalization}
+\end{figure}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../figures/ex3_spectrum_cavity.pdf}
+    \caption{Spectral density of the Anderson Model for small disorder $W = \num{.3}$ on a large RRG of connectivity $c=3$ and $ N = 2^{10}$ nodes calculated by using the Cavity Method with $\varepsilon = \num{e-3}$ and the given cavity equations.}
+    \label{fig:spectrum_cavity_method}
+\end{figure}
+
+To obtain a solid understanding of the Anderson Model's spectrum and to check them for consistency we use different techniques to calculate the spectral density.
+Firstly we use the most straight-forward technique which is -- in this case -- Exact Diagonalization.
+In Figure \ref{fig:spectrum_exact_diagonalization} you can see the eigenvalues of the system plotted in a histogram.
+This gives us exactly the spectral density we are interested in.
+\par
+
+In similar fashion we have plotted the results of the cavity method in Figure \ref{fig:spectrum_cavity_method} such that we find the spectral density $\rho(\lambda)$ on the y-axis.
+We can see that both results are consistent with each other.
+
+
+\subsection{Spectrum from Population Method}
+
+\begin{figure}[htpb]
+    \centering
+    \includegraphics[width=0.8\textwidth]{../figures/ex3_spectrum_population.pdf}
+    \caption{Spectral density of the Anderson Model for small disorder $W = \num{.3}$ on a large RRG of connectivity $c=3$ and $ N = 2^{10}$ nodes calculated by using the Population Method with $N_p = \num{e3}$ and the given cavity equations.}
+    \label{fig:spectrum_population_method}
+\end{figure}
+
+We introduce another technique to analyze the system:
+The Population Method uses a population of cavity precisions to calculate the marginal precisions of the system.
+From Figure \ref{fig:spectrum_population_method} we can clearly see that this technique is also consistent with the other methods we have used to calculate the spectrum of the Anderson Hamiltonian.
+\par
+
+To ensure that the population of cavity precisions has reached equilibrium we use a stopping criterion.
+Such we stop, when a whole sweep ($N_p$ updates) has not changed the absolute mean value of the cavity precisions by more than \num{e-4}.
+We are aware that this criterion is not universal, but throughout experimenting with the algorithm we have seen that this is criterion works sufficiently well.
+
+
+\subsection{Extended-Localized Transition}
+
+To look at the transition from extended to Localized States we can analyze the typical value of the cavity variances $g = \nicefrac{i}{\omega}$
 
 
 
